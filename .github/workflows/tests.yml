@@ -1,0 +1,25 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Tests
+        run: python -m pytest -q
+      - name: Correr el proceso completo con los datos de ejemplo
+        run: python -m conciliacion todo --fecha-corte 2026-11-16
+      - name: Guardar el Excel generado
+        uses: actions/upload-artifact@v4
+        with:
+          name: reporte-conciliacion
+          path: salida/conciliacion.xlsx
